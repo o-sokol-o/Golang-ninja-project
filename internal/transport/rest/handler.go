@@ -1,40 +1,21 @@
 package rest
 
 import (
-	"context"
-	"time"
-
 	"github.com/gin-gonic/gin"
-
-	"github.com/tarkovskynik/Golang-ninja-project/internal/domain"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "github.com/tarkovskynik/Golang-ninja-project/docs"
 )
 
-type Users interface {
-	SignUp(ctx context.Context, inp domain.SignUpInput) error
-	SignIn(ctx context.Context, inp domain.SignInInput) (string, string, error)
-	ParseToken(token string) (int, error)
-	RefreshTokens(ctx context.Context, refreshToken string) (string, string, error)
-	GetRefreshTokenTTL() time.Duration
-}
-
-type FilesServece interface {
-	Upload(ctx context.Context, input domain.File) (string, error)
-	GetFiles(ctx context.Context, id int) ([]domain.File, error)
-	StoreFileInfo(ctx context.Context, input domain.File) error
-}
-
 type Handler struct {
 	usersService      Users
-	filesService      FilesServece
+	filesService      FilesService
 	maxUploadFileSize int64
 	fileTypes         map[string]interface{}
 }
 
-func NewHandler(users Users, files FilesServece, maxUploadFileSize int64, fileTypes map[string]interface{}) *Handler {
+func NewHandler(users Users, files FilesService, maxUploadFileSize int64, fileTypes map[string]interface{}) *Handler {
 	return &Handler{
 		usersService:      users,
 		filesService:      files,
